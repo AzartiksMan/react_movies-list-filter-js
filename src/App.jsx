@@ -3,22 +3,20 @@ import './App.scss';
 import { MoviesList } from './components/MoviesList';
 import moviesFromServer from './api/movies.json';
 
-function getPreparedMovies (movies, query) {
-  let preparedMovies = movies;
+const getPreparedMovies = (movies, query) => {
+  const check = query.trim().toLowerCase();
 
-  if (query !== '') {
-    const check = query.trim().toLowerCase()
-
-    preparedMovies = preparedMovies.filter(({title, description}) => {
-      const titleCheck = title.toLowerCase();
-      const descriptionCheck = description.toLowerCase();
-
-      return titleCheck.includes(check) || descriptionCheck.includes(check);
-    });
+  if (check === '') {
+    return movies;
   }
 
-  return preparedMovies
-}
+  return movies.filter(({ title, description }) => {
+    const titleCheck = title.toLowerCase();
+    const descriptionCheck = description.toLowerCase();
+
+    return titleCheck.includes(check) || descriptionCheck.includes(check);
+  });
+};
 
 export const App = () => {
   const [query, setQuery] = useState('');
@@ -40,10 +38,10 @@ export const App = () => {
                 id="search-query"
                 className="input"
                 placeholder="Type search word"
-                onChange={(event) => {
+                onChange={event => {
                   setQuery(event.target.value);
                 }}
-                />
+              />
             </div>
           </div>
         </div>
@@ -53,6 +51,5 @@ export const App = () => {
 
       <div className="sidebar">Sidebar goes here</div>
     </div>
-  )
+  );
 };
-
