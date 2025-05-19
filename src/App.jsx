@@ -3,25 +3,28 @@ import './App.scss';
 import { MoviesList } from './components/MoviesList';
 import moviesFromServer from './api/movies.json';
 
-const getPreparedMovies = (movies, query) => {
-  const check = query.trim().toLowerCase();
+const preparedMovies = (movies, query) => {
+  const normalizedQuery = query.trim().toLowerCase();
 
-  if (check === '') {
+  if (!normalizedQuery) {
     return movies;
   }
 
   return movies.filter(({ title, description }) => {
-    const titleCheck = title.toLowerCase();
-    const descriptionCheck = description.toLowerCase();
+    const lowerTitle = title.toLowerCase();
+    const lowerDescription = description.toLowerCase();
 
-    return titleCheck.includes(check) || descriptionCheck.includes(check);
+    return (
+      lowerTitle.includes(normalizedQuery) ||
+      lowerDescription.includes(normalizedQuery)
+    );
   });
 };
 
 export const App = () => {
   const [query, setQuery] = useState('');
 
-  const visibleMovies = getPreparedMovies(moviesFromServer, query);
+  const visibleMovies = preparedMovies(moviesFromServer, query);
 
   return (
     <div className="page">
